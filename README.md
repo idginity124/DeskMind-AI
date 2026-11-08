@@ -1,185 +1,141 @@
 <p align="center"><a href="README.md">English</a> &nbsp; / &nbsp; <a href="README.tr.md">Türkçe</a></p>
 
-<p align="center"><img src="assets/readme-hero.svg" width="100%" alt="DeskMind AI — Your documents. Your knowledge. Your machine."></p>
+<p align="center"><img src="assets/readme-hero.svg" width="840" alt="DeskMind AI — local document search"></p>
 
-<p align="center"><a href="https://github.com/idginity124/-DeskMind-AI/actions/workflows/tests.yml"><img alt="CI tests" src="https://github.com/idginity124/-DeskMind-AI/actions/workflows/tests.yml/badge.svg"></a> &nbsp; <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-blue"></a> &nbsp; <img alt="Local-first" src="https://img.shields.io/badge/deployment-local--first-8bbaff"></p>
+<p align="center">
+<a href="https://github.com/idginity124/DeskMind-AI/actions/workflows/tests.yml"><img src="https://github.com/idginity124/DeskMind-AI/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
+&nbsp; <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
+</p>
 
-<p align="center"><strong>Ask your own documents questions. Get the relevant passages, see where they came from, and optionally generate answers using a local LLM.</strong></p>
+DeskMind is a local search app for PDFs and notes. Add your files, ask a question, and see the passages that match. If you have [Ollama](https://ollama.com) running, you can also get an answer written from those passages.
 
-<p align="center"><a href="#quick-start">Get started</a> &nbsp; · &nbsp; <a href="#inside-the-app">Screenshots</a> &nbsp; · &nbsp; <a href="#how-it-works">Architecture</a> &nbsp; · &nbsp; <a href="docs/QUICKSTART.tr.md">Turkish quick start</a> &nbsp; · &nbsp; <a href="PRIVACY.md">Privacy</a></p>
+I started this project as a way to build and understand a RAG pipeline end to end, rather than just call a hosted chatbot API. It now has a small web interface, a document library, and source references you can check yourself.
 
-<p align="center"><img src="docs/screenshots/app.png" width="900" alt="DeskMind AI desktop interface with demo workspace, question area and document library"></p>
-<p align="center"><sub>Screenshot of the actual frontend with sample document names; not a claim that the model produced a particular answer.</sub></p>
+<p align="center"><img src="docs/screenshots/app.png" width="840" alt="DeskMind desktop interface"></p>
 
-## Why DeskMind?
+<details>
+<summary>See the narrow-screen layout</summary>
+<p align="center"><img src="docs/screenshots/mobile.png" width="290" alt="DeskMind mobile-sized layout"></p>
+</details>
 
-Most people have useful information locked away in PDFs and notes. Opening every file and guessing which keyword to search for gets tedious. DeskMind builds a **semantic index** of your local documents so you can ask questions naturally, even across Turkish and English. It shows which passages were retrieved instead of hiding them behind an opaque answer.
+## What it does
 
-It is designed to run on **your own computer** with **no account, no paid API key and no cloud document-upload step**. Generated answers are optional: retrieval-only mode works without Ollama.
+- **Search your own documents.** Upload text-based PDFs, TXT files, or Markdown notes from the browser.
+- **Find related text, not just matching words.** Multilingual embeddings let you search Turkish and English material together.
+- **Show the source.** Results include the filename, the matching text, a similarity score, and a page number for PDFs.
+- **Keep workspaces separate.** Try the included demo, then switch to your personal library.
+- **Use an LLM only if you want to.** With Ollama configured, DeskMind can turn retrieved passages into a response. Without it, you still get document search.
 
-| Bring your knowledge | Find the right evidence | Stay in control |
-| :--- | :--- | :--- |
-| Upload text-based **PDF, TXT and Markdown** files | Multilingual embedding search with **SentenceTransformers + Qdrant** | Data stored in a local workspace; run on **localhost** |
-| Separate **Demo** and **My Library** workspaces | Source filenames, similarity scores and **PDF page numbers** | **Ollama is optional**; inspect the original retrieved excerpts |
-| Add, list and remove files from the browser | Small reproducible retrieval evaluation script | No sign-in, subscriptions or mandatory external LLM API |
+There is no account to create. The app and its index run on your computer. Model weights are downloaded on first use; uploaded documents are not sent to a hosted LLM by DeskMind.
 
-> [!IMPORTANT]
-> **Scope: v1.0 — local, single-user application.** DeskMind is an open-source document assistant, **not** a hardened cloud service, an audited security product or a verified fact-checking system. The API has no user authentication; **do not expose it to the internet or an untrusted network**. A model response may be inaccurate even when passages are retrieved.
+## Getting started
 
-## Inside the app
-
-<table><tr><td align="center"><img src="docs/screenshots/app.png" width="700" alt="Desktop screenshot"><br><sub>Desktop: search + document library</sub></td><td align="center"><img src="docs/screenshots/mobile.png" width="255" alt="Mobile-sized responsive screenshot"><br><sub>Responsive narrow-screen layout</sub></td></tr></table>
-
-**Three ways to use it:**
-
-1. **Try the demo.** Open the app, choose **Demo**, and click **Örnek belgeleri hazırla** to create an index of included sample documents.
-2. **Search your own files.** Switch to **Kütüphanem** (My Library), upload a supported document, and ask a question about its content.
-3. **Add local answer generation.** Run Ollama and supply a model name in the UI. Leave the field blank to see the best matching excerpt without generation.
-
-## Quick start
-
-**Requirements:** Linux recommended; Python **3.12 or 3.13** recommended, enough disk space for ML dependencies and embedding weights. First use downloads a multilingual embedding model from Hugging Face. The app then works locally; Ollama models are separate downloads.
-
-### Linux (recommended; Bash or Fish)
+The easiest setup is on Linux. Python 3.12 or 3.13 is recommended.
 
 ```bash
-git clone https://github.com/idginity124/-DeskMind-AI.git
-cd -- -DeskMind-AI
+git clone https://github.com/idginity124/DeskMind-AI.git
+cd DeskMind-AI
 bash scripts/setup-linux.sh
 bash scripts/run-local.sh
 ```
 
-Open **http://127.0.0.1:8000**. The setup script creates `.venv` inside the project and installs a **CPU PyTorch wheel** to avoid downloading multi-GB NVIDIA CUDA libraries on AMD/CPU systems. It does not install system packages or require `sudo`. Use `PYTHON=python3.12 bash scripts/setup-linux.sh` to pick a Python binary.
+Open **http://127.0.0.1:8000**.
 
-> **Fish users:** you do not need to activate the virtual environment for the scripts above. For manual commands use `source .venv/bin/activate.fish`, not Bash's `activate` file.
+The setup script creates a project-local Python environment and installs CPU PyTorch rather than downloading NVIDIA CUDA packages. It does not modify system Python or require sudo.
 
-### Manual install (or other OS)
+If you use Fish, the scripts above still work as written. To activate the environment manually, run `source .venv/bin/activate.fish`.
 
-```bash
-python -m venv .venv
-# Fish: source .venv/bin/activate.fish
-# Bash/Zsh: source .venv/bin/activate
-python -m pip install -r requirements-rag.txt
-python -m uvicorn api:app --host 127.0.0.1 --port 8000
-```
+### Try it with a document
 
-The manual route may download GPU-related libraries depending on your platform and PyTorch package selection. Use the Linux script for a CPU-first install.
+1. Open **Demo** and choose **Örnek belgeleri hazırla** to index the included examples.
+2. Ask something about the sample notes. The matching passages should appear with their sources.
+3. Switch to **Kütüphanem** to upload one of your own files.
+4. Open a result and compare it with the original document. Retrieval scores are not correctness percentages.
 
-### Docker (optional, CPU)
+### Optional: generate an answer locally
 
-```bash
-docker compose up --build
-```
-
-Open **http://127.0.0.1:8000**. The example Compose stack stores the app data and model cache in Docker volumes. Ollama running on your **host** is not automatically reachable from `127.0.0.1` inside Docker; use the native install if you want the simplest local LLM setup. Docker builds have not yet been validated in the local test environment.
-
-### Optional: turn passages into an answer with Ollama
-
-Install and start [Ollama](https://ollama.com), then pull a compatible model, for example:
+Install and start Ollama, then download a model, for example:
 
 ```bash
 ollama pull qwen2.5:3b
 ```
 
-Type `qwen2.5:3b` in DeskMind's model field and ask your question. **Without a model name, DeskMind returns a retrieved passage rather than inventing a generated answer.** Model-generated claims and citations are not independently fact-checked by the app.
+Enter `qwen2.5:3b` in the model field in DeskMind. When the field is empty, the app returns the best retrieved passage instead of generating text.
 
-## How it works
+### Docker
 
-```mermaid
-flowchart TD
-    A[PDF / TXT / Markdown] --> B[Extract text and chunk]
-    B --> C[Multilingual sentence embeddings]
-    C --> D[(Qdrant local index)]
-    Q[Question] --> E[Embed the question]
-    E --> D
-    D --> F[Top-k retrieved source passages]
-    F --> G{Ollama model selected?}
-    G -->|No| H[Show excerpt and source]
-    G -->|Yes| I[Generate answer with retrieved context]
-    H --> J[User verifies original material]
-    I --> J
+There is also a CPU-oriented Compose setup:
+
+```bash
+docker compose up --build
 ```
 
-**Architecture at a glance:** `semantic.py` handles the embedding/retrieval pipeline; `api.py` exposes the local HTTP API; `web/index.html` provides the responsive UI; `benchmark.py` reports retrieval metrics; and `deskmind.py` retains an introductory lexical-search baseline.
+Docker builds have not been fully tested across environments. A host Ollama server is not automatically reachable at `127.0.0.1` from inside the container; the native install is the simpler choice for local LLM use.
 
-<details><summary><b>AI engineering glossary</b></summary>
+## Under the hood
 
-| Term | Meaning in this project |
+DeskMind uses `paraphrase-multilingual-MiniLM-L12-v2` to turn document chunks and questions into 384-dimensional embeddings. Qdrant stores the vectors locally and returns the closest chunks when you search. If Ollama is enabled, those chunks become context for the language model.
+
+```mermaid
+flowchart LR
+  A[PDF / TXT / MD] --> B[Extract and split text]
+  B --> C[Sentence embeddings]
+  C --> D[(Local Qdrant)]
+  E[Question] --> F[Question embedding]
+  F --> D
+  D --> G[Matching passages]
+  G --> H{Ollama enabled?}
+  H -->|No| I[Show sources]
+  H -->|Yes| J[Generate answer]
+```
+
+The main pieces are fairly small:
+
+| File | Role |
 | --- | --- |
-| **Chunk** | Short piece extracted from a document; smaller than the whole file |
-| **Embedding** | Numeric vector representing a text passage; this model outputs 384 dimensions |
-| **Indexing** | Converting document chunks into vectors and storing their metadata in Qdrant |
-| **Retrieval (top-k)** | Ranking/selecting the most related passages for a user query |
-| **RAG** | Retrieval-Augmented Generation: add retrieved passages to a language model prompt |
-| **Cosine similarity** | Vector similarity measure; **not** answer correctness probability |
-| **Grounding** | Supporting an answer with retrieved source material; still needs verification |
-| **Recall@K / MRR** | Retrieval ranking evaluation measures; not generated-answer correctness |
+| `semantic.py` | Document chunking, embeddings, Qdrant search, optional Ollama calls |
+| `api.py` | Local FastAPI routes, uploads, deletes, workspaces |
+| `web/index.html` | Browser interface |
+| `benchmark.py` | Retrieval measurements on labeled examples |
+| `tests/` | Unit and API tests |
 
-</details>
+See [the architecture notes](docs/ARCHITECTURE.md) for data flow and index recovery details. I also wrote a [Turkish RAG walkthrough](docs/01-RAG-REHBERI.tr.md) while working through the underlying concepts.
 
-For a walkthrough of the pipeline and its trade-offs, see [Architecture](docs/ARCHITECTURE.md) and [the Turkish RAG guide](docs/01-RAG-REHBERI.tr.md).
+## Tests and retrieval checks
 
-## Testing and evaluation
-
-Run the offline unit and API tests (after installing the dev requirements):
+After setting up the environment:
 
 ```bash
 .venv/bin/python -m pip install -r requirements-dev.txt
 .venv/bin/python -m pytest -q
 ```
 
-**29 automated tests** currently cover chunk splitting, controlled retrieval, upload/delete endpoints, rollback on application errors, invalid files, scanned-PDF rejection, page references and evaluation math. Tests use **fake deterministic embeddings**; they do not prove real model accuracy, Docker compatibility, GPU support or reliability on untrusted PDFs.
+The current suite contains **29 automated tests** covering document handling, API behavior, extraction, recovery on ordinary errors, and evaluation calculations. Most retrieval tests use deterministic mock embeddings. Passing them does **not** establish real-world search accuracy.
 
-You can benchmark the bundled demo corpus after indexing it:
+To measure retrieval on the bundled example questions:
 
 ```bash
 .venv/bin/python semantic.py index --docs examples/docs
 .venv/bin/python benchmark.py --dataset eval/demo_questions.json --data-dir .deskmind --top-k 3
 ```
 
-The evaluation script prints **Recall@K, MRR@K, hit rate and average query latency** on a tiny labeled sample set. These are educational smoke-test metrics, **not** a general benchmark or guaranteed quality numbers. Reproduce experiments with model versions, corpus, labels, hardware and query count documented.
+The script reports Recall@K, MRR@K and query latency. The demo dataset is intentionally tiny, so treat the numbers as a sanity check, not a benchmark claim.
 
-## API and source layout
+## Current limits
 
-| Endpoint | Purpose |
-| --- | --- |
-| `GET /api/health?workspace=demo` | Index and document counts |
-| `GET /api/documents?workspace=personal` | List uploaded personal documents |
-| `PUT /api/documents/{filename}` | Upload a personal document (PDF/TXT/MD) |
-| `DELETE /api/documents/{filename}` | Delete a personal document and rebuild its index |
-| `POST /api/demo/index` | Build the sample corpus |
-| `POST /api/ask` | Retrieve results and optionally generate an Ollama response |
+- **Text PDFs only.** Scanned/image-only PDFs need OCR, which is not included yet. Maximum upload size is 8 MB, and PDFs are limited to 100 pages.
+- Adding or removing a document rebuilds the personal index. This is fine for a small library but slower as it grows.
+- Complex PDF layouts, tables and columns may not extract cleanly.
+- Ollama answers are **not fact-checked** and citations are not automatically verified. Always inspect the source passage.
+- This is a **single-user localhost app**. It has no login or encryption at rest. Do not expose the server to the internet or an untrusted network.
+- Index changes have application-level rollback for ordinary errors, but that does not replace backups or protect against every crash.
 
-The UI includes `X-DeskMind-Client: local-ui` on upload/delete requests. **This is not authentication** and does not make the server safe to expose publicly.
+I'm working toward better PDF handling, incremental indexing, improved retrieval evaluation and a smoother chat experience. These are plans, not features in this release.
 
-```
-DeskMind-AI/
-├── api.py                  # Local API and document library
-├── semantic.py             # Embeddings, Qdrant and retrieval
-├── web/index.html          # Browser UI
-├── benchmark.py            # Reproducible demo evaluation
-├── eval/                   # Labeled example questions
-├── examples/docs/          # Non-private sample corpus
-├── tests/                  # Automated tests
-├── scripts/                # CPU-first Linux setup and startup
-└── docs/                   # Architecture, screenshots and guides
-```
+## Contributing and license
 
-## Current limitations
+Issues, bug reports and small improvements are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md). For data handling and deployment caveats, see [PRIVACY.md](PRIVACY.md) and [SECURITY.md](SECURITY.md).
 
-- Only **text-based PDF**, `.txt` and `.md` are supported. **No OCR** for scanned/image-only PDFs. File limit: 8 MB; PDF limit: 100 pages.
-- Changes to the personal library **rebuild its full index**, which can become slow on large libraries. Staging + rollback helps with ordinary failures but does not replace backups or crash-safe database transactions.
-- Generated citations are **not automatically verified**. Irrelevant results can still rank highly; no reranking or calibrated abstention threshold is implemented.
-- Complex tables and multi-column PDFs may be extracted imperfectly. Retrieval uses approximate word chunks, not tokenizer-aware segmentation.
-- This is a **single-user, localhost-only** project. No authentication, data encryption at rest, production monitoring or cloud-hosted demo is provided.
-- CPU-first setup is tested through automated code paths; performance, Docker builds and real-document handling vary by system. Not a claim of exhaustive compatibility testing.
+MIT licensed — see [LICENSE](LICENSE). Changes are tracked in [CHANGELOG.md](CHANGELOG.md).
 
-Read [Privacy](PRIVACY.md), [Security](SECURITY.md), [Contributing](CONTRIBUTING.md), [Changelog](CHANGELOG.md) and [MIT License](LICENSE).
-
-## Planned improvements
-
-Streaming Ollama output · Click-to-open source passages · Incremental indexing · Better PDF tables · Larger multilingual evaluation datasets · Token-aware chunking and reranking · Optional OCR · Packaged installers.
-
----
-
-<p align="center">Built as an open-source, practical AI engineering project. <a href="https://github.com/idginity124">More projects</a> · <a href="README.tr.md">Türkçe dokümantasyon</a></p>
+<p align="center"><a href="https://github.com/idginity124">Other projects</a> · <a href="README.tr.md">Türkçe</a></p>
