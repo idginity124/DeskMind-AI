@@ -1,159 +1,140 @@
 <p align="center"><a href="README.md">English</a> &nbsp; / &nbsp; <a href="README.tr.md">Türkçe</a></p>
 
-<p align="center"><img src="assets/readme-hero.svg" width="100%" alt="DeskMind AI — Belgelerin, bilgin, bilgisayarın"></p>
+<p align="center"><img src="assets/readme-hero.svg" width="840" alt="DeskMind AI"></p>
 
-<p align="center"><strong>PDF ve notlarını kendi bilgisayarında arayan, kullandığı kaynakları gösteren, istersen yerel bir dil modeliyle yanıt üreten açık kaynak belge asistanı.</strong></p>
+DeskMind, PDF dosyalarında ve notlarda arama yapmak için geliştirdiğim yerel bir uygulama. Dosyalarını ekliyorsun, bir soru soruyorsun, uygulama da ilgili metin parçalarını hangi belgeden aldığını göstererek buluyor. Bilgisayarında Ollama çalışıyorsa bu parçaları kullanarak yanıt da oluşturabiliyor.
 
-<p align="center"><a href="#hızlı-kurulum">Kurulum</a> · <a href="#uygulama-nasıl-kullanılır">Kullanım</a> · <a href="#sistemin-mimarisi">Mimari</a> · <a href="#sınırlamalar">Sınırlamalar</a> · <a href="docs/01-RAG-REHBERI.tr.md">RAG dersi</a></p>
+Projeye RAG sisteminin nasıl çalıştığını uçtan uca öğrenmek için başladım. Hazır bir sohbet API'si bağlamak yerine belge okuma, metni parçalara ayırma, embedding oluşturma, vektör arama ve kaynak gösterme adımlarını ayrı ayrı geliştirdim. Sonra bunları küçük bir web arayüzünde birleştirdim.
 
-<p align="center"><img src="docs/screenshots/app.png" width="900" alt="DeskMind masaüstü web arayüzü"></p>
-<p align="center"><sub>Gerçek web arayüzünün örnek dosya adlarıyla alınmış ekran görüntüsü; yapay zekâ çıktısını gösteren bir demo değildir.</sub></p>
+<p align="center"><img src="docs/screenshots/app.png" width="840" alt="DeskMind masaüstü arayüzü"></p>
 
-## DeskMind AI ne işe yarar?
+<details>
+<summary>Dar ekran görünümü</summary>
+<p align="center"><img src="docs/screenshots/mobile.png" width="290" alt="Dar ekranda DeskMind"></p>
+</details>
 
-Ders notların, teknik dökümanların veya iş belgelerin farklı PDF ve metin dosyalarında olabilir. DeskMind, bu dosyaları tek tek açmak yerine **anlamlarına göre aramanı** sağlar. Türkçe bir soruya karşılık İngilizce belgedeki alakalı bölümü de getirebilir. İstersen bulduğu bölümleri yerel bir Ollama modeline göndererek cevap oluşturur. Dosya adı, PDF sayfası ve kullanılan metni görüp cevabı kendin doğrulayabilirsin.
+## Neler yapabiliyor?
 
-**Önemli ayrım:** DeskMind internete bağlanan genel amaçlı bir sohbet botu değildir; yüklediğin belgeler üzerinde çalışan bir arama ve isteğe bağlı RAG uygulamasıdır.
+- **Kendi belgelerini ara.** Metin içeren PDF, TXT ve Markdown dosyalarını tarayıcıdan yükleyebilir, listeleyebilir ve silebilirsin.
+- **Sadece kelime eşleştirmiyor.** Çok dilli embedding modeliyle Türkçe ve İngilizce belgelerde anlamca yakın parçaları bulabiliyor.
+- **Kaynağı gösteriyor.** Dosya adı, ilgili metin, benzerlik skoru ve PDF dosyalarında sayfa numarası sonuçlarda yer alıyor.
+- **Örnek belgeler ayrı.** Demo alanında sistemi deneyebilir, sonra kendi kütüphanene geçebilirsin.
+- **Ollama isteğe bağlı.** Yerel dil modeli kurmadan da belge araması çalışıyor.
 
-| Özellik | Neler yapabilirsin? |
-| --- | --- |
-| **Belge kütüphanesi** | PDF, `.txt`, `.md` dosyalarını tarayıcıdan yükle, listele, sil |
-| **Anlamsal arama** | Aynı kelimeleri kullanmadan ilişkili metinleri bul |
-| **Çok dilli destek** | Türkçe/İngilizce sorgu ve belgeleri aynı sistemde ara |
-| **Kaynak gösterme** | Dosya adı, metin parçası, skor ve mevcutsa PDF sayfasını gör |
-| **Yerel cevap üretme** | Ollama yüklüyse soru ve bulunan kaynaklarla yanıt üret |
-| **Gizlilik** | Belgeler ve indeks bilgisayarındaki `.deskmind/` klasöründe kalır |
-| **Ölçüm** | Küçük örnek veriyle Recall@K ve MRR sonuçlarını hesapla |
+Hesap oluşturman gerekmiyor. Belgeler ve indeks bilgisayarında tutuluyor. İlk kurulumda embedding modelinin ağırlıkları indiriliyor; DeskMind belgelerini bir bulut LLM hizmetine göndermiyor.
 
-> [!WARNING]
-> **Bu v1.0, tek kullanıcılı ve yalnızca yerelde çalıştırılmak üzere tasarlanmıştır.** Kullanıcı hesabı/giriş sistemi yok. Sunucuyu internete açma. Üretilen cevaplar hatalı olabilir; kaynak pasajlarını kontrol et.
+## Kurulum
 
-## Hızlı kurulum
-
-### CachyOS / Arch / Linux — önerilen yol
-
-Önce depoyu klonla, sonra kurulum betiğini çalıştır:
+Linux için önerdiğim yol aşağıdaki komutlar. Python 3.12 veya 3.13 kullanmanı öneriyorum.
 
 ```bash
-git clone https://github.com/idginity124/-DeskMind-AI.git
-cd -- -DeskMind-AI
+git clone https://github.com/idginity124/DeskMind-AI.git
+cd DeskMind-AI
 bash scripts/setup-linux.sh
 bash scripts/run-local.sh
 ```
 
-Tarayıcıda `http://127.0.0.1:8000` adresini aç.
+Sonra tarayıcıdan **http://127.0.0.1:8000** adresini aç.
 
-**Bu komutlar neden var?**
+Kurulum betiği proje içinde `.venv` oluşturuyor. CPU PyTorch paketini kullanıyor; NVIDIA CUDA paketlerini ayrıca indirmiyor ve sistem Python'una müdahale etmiyor.
 
-- `git clone` kaynak kodlarını GitHub'dan bilgisayarına indirir.
-- `cd -- -DeskMind-AI` proje klasörüne girer. `--` işareti klasör adının `-` ile başlaması nedeniyle kullanılır.
-- `setup-linux.sh` projeye özel `.venv` Python sanal ortamını açar ve bağımlılıkları yükler. AMD ekran kartlı ya da NVIDIA olmayan sistemlerde gereksiz CUDA paketleri yerine CPU PyTorch kullanır.
-- `run-local.sh` FastAPI sunucusunu başlatır. Sistem Python'unu değiştirmez.
+Fish Shell kullanıyorsan yukarıdaki betikler yine çalışır. Ortamı elle açman gerekirse `source .venv/bin/activate.fish` yaz.
 
-**Python:** 3.12/3.13 önerilir. Başlangıçta embedding modeli Hugging Face üzerinden indirilir; bu yüzden ilk indeksleme için internet gerekir. İndirme tamamlandığında yerel arama internet olmadan çalışabilir.
+### İlk belgeyle deneme
 
-Fish Shell'de kendin bir ortamı etkinleştireceksen:
+1. **Demo** alanında **Örnek belgeleri hazırla** seçeneğine bas.
+2. Örnek belgeler hakkında bir soru sor ve çıkan kaynakları incele.
+3. **Kütüphanem** alanına geçip kendi PDF veya metin dosyanı yükle.
+4. Bulunan parçayı asıl belgeyle karşılaştır. Benzerlik skoru bir doğruluk yüzdesi değil.
 
-```fish
-source .venv/bin/activate.fish
-```
+### Ollama ile yanıt üretme
 
-Bash için `source .venv/bin/activate` kullanılır; Fish'e Bash komutunu vermek hata üretir.
-
-### Ollama ile yapay zekâ yanıtı (isteğe bağlı)
-
-Yerel Ollama servisi kuruluyken örnek bir model indir:
+Yerel Ollama servisini kurup başlattıktan sonra örneğin şu modeli indirebilirsin:
 
 ```bash
 ollama pull qwen2.5:3b
 ```
 
-DeskMind'deki Ollama model alanına `qwen2.5:3b` yaz. Alanı boş bırakırsan sistem **yalnızca en alakalı kaynak parçasını getirir**, yeni bir LLM cevabı üretmez.
+Uygulamadaki model alanına `qwen2.5:3b` yaz. Bu alan boşsa DeskMind yeni bir yanıt üretmez; en yakın kaynak parçasını getirir.
 
-### Docker ile deneme
+### Docker seçeneği
 
 ```bash
 docker compose up --build
 ```
 
-Bu yöntem örnek bir **CPU** kurulumu sağlar. Docker konteynerinin içindeki `127.0.0.1`, bilgisayarındaki Ollama sunucusu değildir; Ollama için ek bağlantı ayarı gerekebilir. Docker kurulumu her ortamda henüz doğrulanmadı.
+Bu yapılandırma CPU kullanımı için hazırlandı. Docker kurulumu farklı sistemlerde kapsamlı biçimde test edilmedi. Konteyner içindeki `127.0.0.1`, bilgisayarında çalışan Ollama'ya işaret etmez; ek ağ ayarı gerekir. Yerel LLM için normal Linux kurulumu daha kolay.
 
-## Uygulama nasıl kullanılır?
+## Nasıl çalışıyor?
 
-1. **Demo:** Uygulamayı ilk açtığında `Demo` alanını seçip `Örnek belgeleri hazırla` düğmesine bas. Örnek dosyalar indekslenir.
-2. **Kütüphanem:** Kendi TXT/Markdown veya metin seçilebilir PDF dosyanı yükle. Taranmış, yalnızca resim içeren PDF'lerde şu an OCR yoktur.
-3. **Soru sor:** Örneğin, *“Bu dokümanda olay müdahale sürecinin aşamaları nasıl anlatılıyor?”*
-4. **Kaynağı incele:** Gelen pasajın dosya adını, ilgili metni ve PDF ise sayfasını kontrol et.
-5. **LLM ile cevap al:** İsteğe bağlı Ollama modeli seç; yanıtın dayandığı kaynakları yine doğrula.
-
-Kişisel dosyalar `.deskmind/workspaces/personal/documents/` altında saklanır ve `.gitignore` sayesinde normal Git commit'lerine dahil edilmez. Yine de Git'e eklemeden önce `git status` çıktısını kontrol et.
-
-## Sistemin mimarisi
+Önce belge metni çıkarılıyor ve kısa parçalara ayrılıyor. `paraphrase-multilingual-MiniLM-L12-v2` modeli her parçayı 384 boyutlu bir vektöre dönüştürüyor. Bu vektörler Qdrant'ta saklanıyor. Soru sorduğunda aynı model soruyu da vektöre çeviriyor ve en yakın metin parçaları aranıyor.
 
 ```mermaid
 flowchart LR
- A[Belge yükle] --> B[Metin çıkar]
- B --> C[Chunking]
- C --> D[Embedding modeli]
- D --> E[(Qdrant)]
- F[Soru] --> G[Soru embedding]
- G --> E
- E --> H[Top-k kaynak pasajı]
- H --> I{Ollama seçildi mi?}
- I -->|Hayır| J[Kaynağı göster]
- I -->|Evet| K[Kaynakla yanıt üret]
+  A[PDF / TXT / MD] --> B[Metni çıkar ve böl]
+  B --> C[Embedding]
+  C --> D[(Yerel Qdrant)]
+  E[Soru] --> F[Soru embedding]
+  F --> D
+  D --> G[İlgili metinler]
+  G --> H{Ollama var mı?}
+  H -->|Hayır| I[Kaynakları göster]
+  H -->|Evet| J[Yanıt oluştur]
 ```
 
-**Kavramlar:**
+Bu aşamalar için kullanılan birkaç terim:
 
-- **Chunking:** Uzun bir belgeyi aramaya uygun parçalara ayırmak.
-- **Embedding:** Her parçayı anlam ilişkilerini yansıtan sayısal vektöre çevirmek. Kullandığımız çok dilli model 384 boyutlu vektör üretir.
-- **Vector database / Qdrant:** Bu vektörleri ve hangi dosyadan geldiklerini saklayan arama katmanı.
-- **Retrieval:** Soruyla en alakalı `top-k` parçayı bulmak.
-- **Generation:** Dil modelinin bulunan parçalardan doğal dil cevabı oluşturması.
-- **RAG:** Retrieval-Augmented Generation; dil modeline dış belgelerden getirilen bilgi eklemek.
-- **Cosine similarity:** Vektörlerin yakınlığını gösterir. Örneğin `0.50`, **%50 doğru cevap** demek değildir.
-- **Grounding:** Cevabın kaynaklardan destek alması. Referans gösterilmesi tek başına doğruluk garantisi vermez.
+- **Chunking:** Uzun belgeyi arama yapılabilecek küçük parçalara ayırma.
+- **Embedding:** Metni anlam ilişkilerini taşıyan sayısal vektöre dönüştürme.
+- **Retrieval:** Soruyla ilgili parçaları bulup sıralama.
+- **RAG:** Bulunan parçaları dil modeline bağlam olarak verip yanıt oluşturma.
+- **Cosine similarity:** Vektörlerin yön benzerliğini ölçme. Sonucun `0.50` olması cevabın %50 doğru olduğu anlamına gelmez.
 
-Bu konuları örneklerle öğrenmek için [Türkçe RAG rehberine](docs/01-RAG-REHBERI.tr.md) ve [mimari belgesine](docs/ARCHITECTURE.md) bakabilirsin.
+Daha ayrıntılı açıklama için [mimari notlarına](docs/ARCHITECTURE.md) ve [Türkçe RAG rehberine](docs/01-RAG-REHBERI.tr.md) bakabilirsin.
 
-## Kod yapısı ve testler
+## Kod yapısı
 
-| Dosya | Sorumluluk |
+| Dosya | Ne yapıyor? |
 | --- | --- |
-| `semantic.py` | Embedding oluşturma, yerel Qdrant'a yazma ve arama |
-| `api.py` | Dosya yükleme, silme ve sorgu HTTP API'si |
-| `web/index.html` | Masaüstü/mobil uyumlu tarayıcı arayüzü |
-| `benchmark.py` | Recall@K, MRR ve gecikme ölçümü |
-| `tests/` | Otomatik yazılım testleri |
-| `scripts/` | Kurulum ve başlatma betikleri |
+| `semantic.py` | Metin parçalama, embedding, Qdrant araması ve isteğe bağlı Ollama bağlantısı |
+| `api.py` | FastAPI ile dosya yükleme, silme ve soru sorma işlemleri |
+| `web/index.html` | Tarayıcı arayüzü |
+| `benchmark.py` | Örnek sorularla arama kalitesini ölçme |
+| `tests/` | Birim ve API testleri |
+
+## Testler
 
 ```bash
 .venv/bin/python -m pip install -r requirements-dev.txt
 .venv/bin/python -m pytest -q
 ```
 
-Bu sürümde **29 otomatik test** bulunuyor. Testler, gerçek embedding modelinin yerine kontrollü sahte vektörler kullanır. Bu nedenle testlerin geçmesi modelin her belgede doğru sonuç vereceğini kanıtlamaz.
+Bu sürümde **29 otomatik test** bulunuyor. Bunlar dosya işlemlerini, API yanıtlarını, hata durumlarını ve bazı değerlendirme hesaplarını kontrol ediyor. Arama testlerinin çoğunda gerçek model yerine sabit, sahte embedding vektörleri kullanılıyor. Testlerin geçmesi, her gerçek PDF'de doğru sonuç alınacağını göstermiyor.
 
-Demo indeksini oluşturduktan sonra:
+Örnek veri üzerinde arama metriklerini görmek için:
 
 ```bash
+.venv/bin/python semantic.py index --docs examples/docs
 .venv/bin/python benchmark.py --dataset eval/demo_questions.json --data-dir .deskmind --top-k 3
 ```
 
-Bu örnek veri kümesi çok küçük. Üretilen kalite metrikleri yalnızca öğretici başlangıç ölçümüdür; genel doğruluk oranı gibi sunulmamalıdır.
+Burada Recall@K, MRR@K ve sorgu süresi hesaplanıyor. Veri kümesi küçük olduğundan sonuçları genel performans iddiası olarak sunmuyorum.
 
-## Sınırlamalar
+## Şu anki sınırlar
 
-- Metin seçilebilir PDF, TXT ve Markdown desteklenir. **OCR henüz yok**. Dosya başına 8 MB ve PDF için 100 sayfa sınırı var.
-- Kütüphaneye belge ekleme/silme tüm kişisel indeksi yeniden oluşturur. Çok büyük arşivlerde yavaşlayabilir.
-- PDF tabloları ve çok sütunlu metinlerin çıkarımı kusursuz olmayabilir.
-- Yanıt üretimi için Ollama ayrıca kurulmalıdır. Üretilen atıflar otomatik olarak doğrulanmıyor.
-- Kimlik doğrulama, çoklu kullanıcı, şifreli depolama ve herkese açık sunucu desteği yoktur. **Sadece `127.0.0.1` üzerinde çalıştır.**
-- Yerel indeks değişikliklerinde uygulama düzeyinde geri alma vardır, fakat bilgisayarın aniden kapanması gibi durumlara karşı yedek almak gerekir.
+- PDF desteği yalnızca **metin seçilebilir dosyalarda** çalışıyor; taranmış PDF'ler için OCR henüz yok. Dosya sınırı 8 MB, PDF sınırı 100 sayfa.
+- Kişisel kütüphaneye dosya eklemek veya silmek, tüm indeksi yeniden oluşturuyor. Büyük arşivlerde yavaş olabilir.
+- Çok sütunlu PDF'lerde ve karmaşık tablolarda metin sırası bozulabilir.
+- Ollama ile üretilen yanıtlar ve atıflar otomatik olarak doğrulanmıyor. Önemli bilgileri kaynağından kontrol etmek gerekiyor.
+- Uygulama **tek kullanıcı ve localhost** için tasarlandı. Giriş sistemi ve şifreli depolama yok. Sunucuyu internete veya güvenilmeyen bir ağa açma.
+- İndeks güncellemelerinde normal uygulama hataları için geri alma mekanizması var; ani kapanma ve disk sorunlarına karşı yedek yine gerekli.
 
-Daha fazla ayrıntı: [Gizlilik](PRIVACY.md) · [Güvenlik](SECURITY.md) · [Katkıda bulunma](CONTRIBUTING.md) · [Değişiklikler](CHANGELOG.md) · [MIT Lisansı](LICENSE).
+Daha iyi PDF ayrıştırma, artımlı indeksleme, geniş kapsamlı çok dilli testler ve sohbet deneyimini geliştirmek sonraki işler arasında. Henüz yapılmamış özellikleri bu sürümün parçası olarak göstermiyorum.
 
----
+## Katkıda bulunma ve lisans
 
-<p align="center"><a href="https://github.com/idginity124">Diğer projeler</a> · <a href="README.md">English README</a></p>
+Hata bildirimi ve katkılar için [CONTRIBUTING.md](CONTRIBUTING.md) dosyasına bakabilirsin. Veri saklama ve güvenlik notları [PRIVACY.md](PRIVACY.md) ile [SECURITY.md](SECURITY.md) içinde. Sürüm değişiklikleri [CHANGELOG.md](CHANGELOG.md) dosyasında.
+
+Proje [MIT lisansı](LICENSE) altında yayımlanıyor.
+
+<p align="center"><a href="https://github.com/idginity124">Diğer projelerim</a> · <a href="README.md">English</a></p>
