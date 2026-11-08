@@ -1,0 +1,6 @@
+[
+  {"question": "Olay müdahalesinin adımları nelerdir?", "relevant_sources": ["security.txt", "ai-basics.tr.md"]},
+  {"question": "What is a vector embedding?", "relevant_sources": ["ai-basics.tr.md", "getting-started.md"]},
+  {"question": "How do I use the demo workspaces?", "relevant_sources": ["getting-started.md"]},
+  {"question": "Can DeskMind run without Ollama?", "relevant_sources": ["getting-started.md", "ai-basics.tr.md"]}
+]
