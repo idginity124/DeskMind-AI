@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="330" viewBox="0 0 1200 330" role="img" aria-labelledby="title desc">
+  <title id="title">DeskMind AI — Your documents, your knowledge, your machine</title>
+  <desc id="desc">Dark blue product banner with interconnected document nodes and a local AI workspace preview.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071225"/><stop offset="1" stop-color="#142f55"/></linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#94caff"/><stop offset="1" stop-color="#8f9cff"/></linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity=".22"/></filter>
+  </defs>
+  <rect width="1200" height="330" rx="28" fill="url(#bg)"/>
+  <path d="M0 255 C275 150 320 380 590 240 S1000 155 1200 215" fill="none" stroke="#45658b" stroke-opacity=".25" stroke-width="2"/>
+  <circle cx="1090" cy="85" r="175" fill="#74a9ff" opacity=".035"/>
+  <g transform="translate(72 66)">
+    <rect x="0" y="5" width="58" height="58" rx="17" fill="url(#accent)"/>
+    <path d="M30 17 L35 29 L47 34 L35 39 L30 51 L25 39 L13 34 L25 29 Z" fill="#091d38"/>
+    <text x="75" y="51" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="43" fill="#f4f8ff">DeskMind <tspan fill="#9ec6ff">AI</tspan></text>
+    <text x="0" y="117" font-family="Arial,Helvetica,sans-serif" font-size="25" font-weight="600" fill="#f1f7ff">Your documents. Your knowledge. Your machine.</text>
+    <text x="0" y="155" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="#adc4df">Local-first document intelligence with source-backed answers.</text>
+    <rect x="0" y="186" width="143" height="32" rx="16" fill="#214b75" stroke="#3f80bc" stroke-opacity=".7"/>
+    <text x="71" y="207" text-anchor="middle" font-size="14" font-family="Arial,Helvetica,sans-serif" fill="#d4e9ff">No cloud upload</text>
+    <rect x="155" y="186" width="122" height="32" rx="16" fill="#214b75" stroke="#3f80bc" stroke-opacity=".7"/>
+    <text x="216" y="207" text-anchor="middle" font-size="14" font-family="Arial,Helvetica,sans-serif" fill="#d4e9ff">PDF · TXT · MD</text>
+  </g>
+  <g transform="translate(757 48)" filter="url(#shadow)">
+    <rect width="367" height="232" rx="15" fill="#0c1729" stroke="#3b5576"/>
+    <rect x="17" y="18" width="333" height="32" rx="8" fill="#16243b"/>
+    <circle cx="37" cy="34" r="5" fill="#83baff"/><text x="54" y="39" fill="#ccdef5" font-family="Arial,Helvetica,sans-serif" font-size="12">Ask your documents...</text>
+    <rect x="18" y="65" width="220" height="55" rx="9" fill="#192b47" stroke="#2b4e78"/>
+    <rect x="29" y="77" width="149" height="6" rx="3" fill="#9ac7fa"/>
+    <rect x="29" y="91" width="184" height="5" rx="3" fill="#6889b2"/>
+    <rect x="29" y="103" width="160" height="5" rx="3" fill="#6889b2"/>
+    <rect x="250" y="65" width="100" height="55" rx="9" fill="#1b3556"/>
+    <text x="264" y="84" fill="#a9caff" font-family="Arial,Helvetica,sans-serif" font-size="11">Sources</text>
+    <rect x="264" y="93" width="70" height="5" rx="2" fill="#6e9ed6"/>
+    <rect x="264" y="103" width="53" height="5" rx="2" fill="#6e9ed6"/>
+    <path d="M30 158 H339" stroke="#294360"/>
+    <rect x="20" y="173" width="99" height="42" rx="8" fill="#142640" stroke="#386288"/>
+    <rect x="132" y="173" width="99" height="42" rx="8" fill="#142640" stroke="#386288"/>
+    <rect x="244" y="173" width="99" height="42" rx="8" fill="#142640" stroke="#386288"/>
+    <text x="69" y="198" text-anchor="middle" fill="#c9e0fc" font-family="Arial,Helvetica,sans-serif" font-size="11">Retrieve</text>
+    <text x="181" y="198" text-anchor="middle" fill="#c9e0fc" font-family="Arial,Helvetica,sans-serif" font-size="11">Cite</text>
+    <text x="293" y="198" text-anchor="middle" fill="#c9e0fc" font-family="Arial,Helvetica,sans-serif" font-size="11">Answer</text>
+  </g>
+</svg>
