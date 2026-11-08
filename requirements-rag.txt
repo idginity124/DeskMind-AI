@@ -1,0 +1,6 @@
+# Full semantic RAG dependencies. First run downloads a multilingual embedding model.
+qdrant-client>=1.12,<2
+sentence-transformers>=3,<7
+fastapi>=0.115,<1
+uvicorn>=0.30,<1
+pypdf>=5,<7
