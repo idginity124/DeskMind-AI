@@ -1,11 +1,12 @@
 <p align="center"><a href="README.md">English</a> &nbsp; / &nbsp; <a href="README.tr.md">Türkçe</a></p>
 
 <p align="center"><img src="assets/readme-hero.svg" width="840" alt="DeskMind AI — local document search"></p>
-![Ziyaretçi Sayısı](https://seeyoufarm.com)
+
 
 <p align="center">
 <a href="https://github.com/idginity124/DeskMind-AI/actions/workflows/tests.yml"><img src="https://github.com/idginity124/DeskMind-AI/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
 &nbsp; <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
+&nbsp; ![Ziyaretçi Sayısı](https://seeyoufarm.com)
 </p>
 
 DeskMind is a local search app for PDFs and notes. Add your files, ask a question, and see the passages that match. If you have [Ollama](https://ollama.com) running, you can also get an answer written from those passages.
