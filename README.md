@@ -4,10 +4,11 @@
 
 
 <p align="center">
-<a href="https://github.com/idginity124/DeskMind-AI/actions/workflows/tests.yml"><img src="https://github.com/idginity124/DeskMind-AI/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
-&nbsp; <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
-&nbsp; ![Ziyaretçi Sayısı](https://seeyoufarm.com)
+  <a href="https://github.com"><img src="https://github.com/badge.svg" alt="Tests"></a>
+  &nbsp; <a href="LICENSE"><img src="https://shields.io" alt="MIT license"></a>
+  &nbsp; <img src="https://seeyoufarm.com" alt="Ziyaretçi Sayısı">
 </p>
+
 
 DeskMind is a local search app for PDFs and notes. Add your files, ask a question, and see the passages that match. If you have [Ollama](https://ollama.com) running, you can also get an answer written from those passages.
 
