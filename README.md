@@ -3,11 +3,10 @@
 <p align="center"><img src="assets/readme-hero.svg" width="840" alt="DeskMind AI — local document search"></p>
 
 
-<p align="center">
-  <a href="https://github.com"><img src="https://github.com/badge.svg" alt="Tests"></a>
-  &nbsp; <a href="LICENSE"><img src="https://shields.io" alt="MIT license"></a>
-  &nbsp; <img src="https://seeyoufarm.com" alt="Ziyaretçi Sayısı">
-</p>
+[![Tests](https://github.com)](https://github.com)
+![MIT license](https://shields.io)
+![Views](https://seeyoufarm.com)
+
 
 
 DeskMind is a local search app for PDFs and notes. Add your files, ask a question, and see the passages that match. If you have [Ollama](https://ollama.com) running, you can also get an answer written from those passages.
